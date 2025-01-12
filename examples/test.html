@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenSlide Test</title>
+
+    <!-- GSAP Dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/CustomEase.min.js"></script>
+
+    <!-- ZenSlide files -->
+    <link rel="stylesheet" href="../css/zen-slide.css">
+    <script src="../js/zen-slide.js"></script>
+
+    <style>
+        /* Reset and basic layout */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        /* Test page specific styles */
+        .controls {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            color: white;
+            z-index: 100;
+        }
+
+        .controls h3 {
+            margin-bottom: 10px;
+        }
+
+        .control-group {
+            margin-bottom: 15px;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        select,
+        button {
+            padding: 5px 10px;
+            margin: 2px 0;
+            width: 200px;
+        }
+
+        /* Hero section for slider */
+        .hero-section {
+            height: 100vh;
+            width: 100vw;
+            background: #000;
+        }
+
+        #zen-slider {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Slider Implementation -->
+    <div class="hero-section">
+        <div id="zen-slider" class="zen-slide">
+            <div class="slide" style="background-image: url('https://picsum.photos/1920/1080?random=1')"></div>
+            <div class="slide" style="background-image: url('https://picsum.photos/1920/1080?random=2')"></div>
+            <div class="slide" style="background-image: url('https://picsum.photos/1920/1080?random=3')"></div>
+            <div class="slide" style="background-image: url('https://picsum.photos/1920/1080?random=4')"></div>
+            <div class="slide" style="background-image: url('https://picsum.photos/1920/1080?random=5')"></div>
+            <h1>Welcome</h1>
+        </div>
+    </div>
+
+    <script>
+        const sliderConfig = {
+            // Core Settings
+            container: 'zen-slider',           // ID or Element of the slider container
+            transitionDuration: 1,            // Duration of slide transition in seconds
+            zoomIntensity: 1.05,             // Zoom scale factor during transitions (1.05 = 5% zoom)
+            autoplay: true,                   // Enable/disable automatic slideshow
+            autoplayDuration: 5000,           // Time between slides in milliseconds
+            pauseOnHover: true,              // Pause autoplay when mouse hovers over slider
+            startAtSlide: 0,                 // Index of the starting slide (0-based)
+
+            // Navigation Controls
+            navigation: {
+                enabled: true,               // Enable/disable all navigation controls
+                type: 'dots',               // Type of navigation: 'dots', 'arrows', or 'both'
+                position: 'bottom',         // Position of dot navigation: 'top', 'bottom', 'sides'
+            },
+
+            // Touch and Swipe Settings
+            touch: {
+                enabled: false,               // Enable/disable touch interactions
+                swipeThreshold: 50,          // Minimum swipe distance to trigger slide change
+                resistance: 0.3,             // Touch movement resistance (0-1)
+                velocityThreshold: 0.1       // Minimum velocity to trigger swipe (pixels/ms)
+            },
+
+            // Loading States
+            loading: {
+                showIndicator: true,         // Show/hide loading spinner
+                preloadNext: true,           // Preload next slide in advance
+                retryCount: 2,               // Number of retry attempts for failed loads
+                timeout: 10000               // Loading timeout in milliseconds
+            },
+
+            // Accessibility Features
+            accessibility: {
+                enabled: true,               // Enable/disable accessibility features
+                announceSlides: true,        // Announce slide changes to screen readers
+                labels: {                    // Customizable aria labels
+                    previous: 'Previous slide',
+                    next: 'Next slide',
+                    dot: 'Go to slide',
+                    pause: 'Pause slider',
+                    play: 'Play slider'
+                }
+            }
+        };
+
+        // Usage Example
+        const slider = new ZenSlide(sliderConfig);
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,254 @@
+/*!
+ * ZenSlide v1.0.0
+ * A minimalist vanilla JavaScript image slider with GSAP animations
+ * MIT License
+* Author: Rakesh Mandal (https://rakeshmandal.com)
+ */
+
+/* Base container styles */
+.zen-slide {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  touch-action: none; /* Prevent default touch behaviors */
+}
+
+/* Individual slides */
+.zen-slide .slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  will-change: opacity, transform;
+  z-index: 1;
+  transform-origin: center center;
+}
+
+.zen-slide .slide.active {
+  z-index: 2;
+}
+
+.zen-slide .slide.touch-move {
+  transition: none !important;
+}
+
+/* Overlay and feedback */
+.zen-slide .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  pointer-events: none;
+  transition: all 0.5s ease;
+}
+
+.zen-slide .overlay-background {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  transition: all 0.5s ease;
+}
+
+.zen-slide .overlay.hidden .overlay-background {
+  opacity: 0;
+}
+
+.zen-slide .pause-feedback {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  box-shadow: inset 0 0 0 0 rgba(255, 255, 255, 0);
+  transition: all 0.5s ease;
+}
+
+.zen-slide .overlay.paused .pause-feedback {
+  background: rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+/* Navigation arrows */
+.zen-slide .nav-arrows {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.zen-slide .nav-arrow {
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  pointer-events: auto;
+}
+
+.zen-slide .nav-arrow:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.zen-slide .nav-arrow svg {
+  width: 24px;
+  height: 24px;
+  fill: white;
+}
+
+/* Navigation dots */
+.zen-slide .nav-dots-container {
+  position: fixed;
+  display: flex;
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.zen-slide .nav-dots-container.bottom {
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.zen-slide .nav-dots-container.top {
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.zen-slide .nav-dots-container.sides {
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  flex-direction: column;
+  gap: 10px;
+}
+
+.zen-slide .nav-dots {
+  display: flex;
+  gap: 16px;
+}
+
+.zen-slide .nav-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.zen-slide .nav-dot:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.zen-slide .nav-dot.active {
+  background: white;
+  transform: scale(1.5);
+}
+
+/* Loading indicator */
+.zen-slide .loading-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  display: none;
+}
+
+.zen-slide .loading-container.visible {
+  opacity: 1;
+  display: block;
+}
+
+.zen-slide .loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error state */
+.zen-slide .slide-error {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-size: 16px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.zen-slide .slide-error.visible {
+  opacity: 1;
+}
+
+/* Accessibility */
+.zen-slide .nav-arrow:focus-visible,
+.zen-slide .nav-dot:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+.zen-slide .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .zen-slide .nav-arrow {
+    width: 40px;
+    height: 40px;
+  }
+
+  .zen-slide .nav-arrow svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .zen-slide .nav-dots-container {
+    bottom: 20px;
+  }
+
+  .zen-slide .nav-dot {
+    width: 8px;
+    height: 8px;
+  }
+}
